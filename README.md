@@ -22,9 +22,20 @@ Backend para el sistema LAIA.
    pip install -r requirements.txt
    ```
 
-4. Crear un archivo .env y agregar tus credenciales.
+4. Crear un archivo .env y agregar tus credenciales:
    ```bash
    OPENAI_API_KEY="key"
+   ```
+
+## Cómo ejecutar
+1. Activar el entorno virtual:
+   ```bash
+   .\venv\Scripts\activate
+   ```
+
+2. Ejecutar la aplicación Flask:
+   ```bash
+   flask run
    ```
 
 ## Diagrama de arquitectura y documentación
