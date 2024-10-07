@@ -13,7 +13,7 @@ Backend para el sistema LAIA.
    ```
 2. Crear y activar un entorno virtual:
    ```bash
-   python -m venv venv
+   python -m venv .venv
    .\.venv\Scripts\activate
    ```
 
@@ -30,7 +30,7 @@ Backend para el sistema LAIA.
 ## Cómo ejecutar
 1. Activar el entorno virtual:
    ```bash
-   .\venv\Scripts\activate
+   .\.venv\Scripts\activate
    ```
 
 2. Ejecutar la aplicación Flask:
