@@ -13,8 +13,8 @@ Backend para el sistema LAIA.
    ```
 2. Crear y activar un entorno virtual:
    ```bash
-   python3 -m venv venv
-   .\venv\Scripts\activate
+   python -m venv venv
+   .\.venv\Scripts\activate
    ```
 
 3. Instalar las dependencias:
