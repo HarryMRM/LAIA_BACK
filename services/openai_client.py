@@ -3,11 +3,11 @@
 #Se importa OPENAI_API_KEY la cual permite autentificar las solicitudes de OPENAI.
 import openai
 from pathlib import Path
-from config import OPENAI_API_KEY, EMBEDDINGS_PATH
+from config import OPENAI_API_KEY
 from json_utils import ask
 from pandas_utils import load_embeddings
 openai.api_key = OPENAI_API_KEY
-embeddings_path = EMBEDDINGS_PATH
+embeddings_path = "data/uabcEmb.csv"
 
 #Se define la llamada que va a recibir el texto a convertir en audio como parametro.
 #Despues se crea un cliente para realizar solicitudes a la API de OpenIA.

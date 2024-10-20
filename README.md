@@ -22,14 +22,14 @@ Backend para el sistema LAIA.
    pip install -r requirements.txt
    ```
 
-4. Crea la carpeta data y agrega tu archivo .csv de embeddings en la carpeta.
+4. Crea la carpeta data y agrega tu archivo .csv de embeddings en la carpeta
 
-5. Crear un archivo .env y agregar lo siguiente:
+5. Cambia el archivo openai_client.py segun el nombre del archivo.
+
+6. Crear un archivo .env y agregar lo siguiente:
    ```bash
    OPENAI_API_KEY="key"
-   EMBEDDINGS_PATH="data/archivo.csv"
    ```
-
 
 ## Cómo ejecutar
 1. Activar el entorno virtual:
