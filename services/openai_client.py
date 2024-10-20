@@ -17,7 +17,7 @@ embeddings_path = "data/uabcEmb.csv"
 # Finalmente se guarda en la ruta el archivo de voz y la retorna para su uso posterior. 
 def generate_speech(input_text):
     client = openai.OpenAI()
-    speech_file_path = Path('speech-result.mp3')
+    speech_file_path = Path('audio/speech-result.mp3')
     response = client.audio.speech.create(
         model='tts-1-hd',
         voice="nova",
