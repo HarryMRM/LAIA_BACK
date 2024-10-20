@@ -1,6 +1,9 @@
 from scipy import spatial
 import tiktoken
-
+"""Se genera un embedding para la consulta (query) usando el cliente y el modelo de embeddings.
+Despues calcula la similitud coseno (usando spatial.distance.cosine) entre el embedding de la consulta y cada embedding de las filas del dataframe, para despues 
+ordenar las filas del dataframe en función de su similitud con la consulta 
+y finalmente devuelve los textos ordenados por su relación con la consulta y sus correspondientes puntuaciones de similitud. """
 def strings_ranked_by_relatedness(query, df, client, embedding_model, top_n=100):
     query_embedding_response = client.embeddings.create(
         model=embedding_model,
@@ -16,10 +19,21 @@ def strings_ranked_by_relatedness(query, df, client, embedding_model, top_n=100)
     strings, relatednesses = zip(*strings_and_relatednesses)
     return strings[:top_n], relatednesses[:top_n]
 
+"""Primero recibe un texto (text) y el nombre de un modelo de lenguaje (model).
+Despues utiliza el paquete tiktoken para codificar el texto según el modelo dado 
+y contar la cantidad de tokens (lo que es importante para limitar la longitud de las consultas a los modelos).
+Finalmente, devuelve el número de tokens en el texto."""
 def num_tokens(text, model):
     encoding = tiktoken.encoding_for_model(model)
     return len(encoding.encode(text))
 
+"""Primero recibe una consulta (query), el dataframe (df), un cliente (client),
+ el modelo de embeddings (embedding_model), el nombre de un modelo de lenguaje (model), y un límite de tokens (token_budget).
+ Despues utiliza strings_ranked_by_relatedness para obtener los textos más relacionados con la consulta.
+ Se construye un mensaje introductorio, que le indica al modelo que debe contestar las dudas de una persona de manera amigable 
+ y en prosa (como si fuera un personaje de anime).
+ Agrega fragmentos de los textos más relevantes en el mensaje, pero sin exceder el límite de tokens.
+ Finalmente devuelve el mensaje completo para enviar al modelo de lenguaje. """
 def query_message(query, df, client, embedding_model, model, token_budget):
     strings, _ = strings_ranked_by_relatedness(query, df, client, embedding_model)
     introduction = """Utiliza la informacion que se te proporcione para contestar a una persona sobre sus dudas, 
@@ -36,6 +50,12 @@ def query_message(query, df, client, embedding_model, model, token_budget):
             message += nx
     return message + question
 
+"""Primero recibe una consulta (query), el dataframe (df), un cliente (client), 
+el modelo de embeddings (embedding_model), el nombre del modelo de lenguaje (model), y un límite de tokens opcional (token_budget).
+Despues utiliza query_message para construir el mensaje que será enviado al modelo de lenguaje.
+Se prepara una lista de mensajes, incluyendo uno con el rol del sistema, que indica que el modelo debe comportarse como un personaje de anime llamado LAIA.
+Procede a envíar el mensaje al modelo de lenguaje usando el cliente para obtener una respuesta.
+Finalmente devuelve la respuesta generada por el modelo."""
 def ask(query, df, client, embedding_model, model, token_budget=3596):
     message = query_message(query, df, client, embedding_model, model, token_budget)
     messages = [
