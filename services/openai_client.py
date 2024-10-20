@@ -4,8 +4,8 @@
 import openai
 from pathlib import Path
 from config import OPENAI_API_KEY
-from json_utils import ask
-from pandas_utils import load_embeddings
+from utils.json_utils import ask
+from utils.pandas_utils import load_embeddings
 openai.api_key = OPENAI_API_KEY
 embeddings_path = "data/uabcEmb.csv"
 
