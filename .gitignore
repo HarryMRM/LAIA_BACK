@@ -22,3 +22,4 @@ wheels/
 Thumbs.db
 instance/
 *.db
+data/

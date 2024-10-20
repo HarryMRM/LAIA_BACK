@@ -26,6 +26,7 @@ Backend para el sistema LAIA.
    ```bash
    OPENAI_API_KEY="key"
    ```
+5. Crea la carpeta data y agrega tu archivo .csv de embeddings en la carpeta.
 
 ## Cómo ejecutar
 1. Activar el entorno virtual:

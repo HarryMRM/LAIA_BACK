@@ -3,8 +3,11 @@
 #Se importa OPENAI_API_KEY la cual permite autentificar las solicitudes de OPENAI.
 import openai
 from pathlib import Path
-from config import OPENAI_API_KEY
+from config import OPENAI_API_KEY, EMBEDDINGS_PATH
+from json_utils import ask
+from pandas_utils import load_embeddings
 openai.api_key = OPENAI_API_KEY
+embeddings_path = EMBEDDINGS_PATH
 
 #Se define la llamada que va a recibir el texto a convertir en audio como parametro.
 #Despues se crea un cliente para realizar solicitudes a la API de OpenIA.
@@ -22,3 +25,9 @@ def generate_speech(input_text):
     )
     response.stream_to_file(speech_file_path)
     return speech_file_path
+
+def generate_response(input_text):
+    client = openai.OpenAI()
+    df = load_embeddings(embeddings_path)
+    answer = ask(input_text, df, client, "text-embedding-ada-002", "gpt-4o-mini")
+    return answer
