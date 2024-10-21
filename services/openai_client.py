@@ -18,12 +18,12 @@ Finalmente se guarda en la ruta el archivo de voz y la retorna para su uso poste
 def generate_speech(input_text):
     client = openai.OpenAI()
     speech_file_path = Path('audio/speech-result.mp3')
-    response = client.audio.speech.create(
-        model='tts-1-hd',
+    with client.audio.speech.with_streaming_response.create(
+        model="tts-1-hd",
         voice="nova",
-        input=input_text
-    )
-    response.stream_to_file(speech_file_path)
+        input=input_text,
+    ) as response:
+        response.stream_to_file(speech_file_path)
     return speech_file_path
 
 def generate_response(input_text):
