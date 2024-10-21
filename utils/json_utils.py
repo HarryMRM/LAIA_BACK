@@ -59,7 +59,7 @@ Finalmente devuelve la respuesta generada por el modelo."""
 def ask(query, df, client, embedding_model, model, token_budget=3596):
     message = query_message(query, df, client, embedding_model, model, token_budget)
     messages = [
-        {"role": "system", "content": "Eres un personaje de anime llamado LAIA que conoce la carrera de Ingenieria en Computacion, si la pregunta es personal puedes responder con un chiste."},
+        {"role": "system", "content": "Eres un personaje de anime llamado LAIA que conoce la carrera de Ingenieria en Computacion, si la pregunta es personal puedes responder con un chiste. No te expreses diciendo cosas como *brinco alegremente* o *sonrio* como si fueras un narrador"},
         {"role": "user", "content": message},
     ]
     response = client.chat.completions.create(model=model, messages=messages, temperature=0)
