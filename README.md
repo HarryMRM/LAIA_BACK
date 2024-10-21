@@ -22,11 +22,13 @@ Backend para el sistema LAIA.
    pip install -r requirements.txt
    ```
 
-4. Crea la carpeta data y agrega tu archivo .csv de embeddings en la carpeta
+4. Crea una carpeta audio en la raiz.
 
-5. Cambia el archivo openai_client.py segun el nombre del archivo.
+5. Crea una carpeta data en la raizy agrega tu archivo .csv de embeddings en la carpeta
 
-6. Crear un archivo .env y agregar lo siguiente:
+6. Cambia el archivo openai_client.py segun el nombre del archivo.
+
+7. Crear un archivo .env y agregar lo siguiente:
    ```bash
    OPENAI_API_KEY="key"
    ```
