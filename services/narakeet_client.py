@@ -5,7 +5,7 @@ from config import NARAKEET_API_KEY
 narakeet_api_key = NARAKEET_API_KEY
 
 def generate_speech(input_text):
-    url = 'https://api.narakeet.com/text-to-speech/mp3?voice=silvana'
+    url = 'https://api.narakeet.com/text-to-speech/mp3?voice=silvana&voice-speed=0.92'
     options = {
         'headers': {
             'Accept': 'application/octet-stream',

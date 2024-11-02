@@ -59,7 +59,16 @@ Finalmente devuelve la respuesta generada por el modelo."""
 def ask(query, df, client, embedding_model, model, token_budget=3596):
     message = query_message(query, df, client, embedding_model, model, token_budget)
     messages = [
-        {"role": "system", "content": "Eres un personaje de anime llamado LAIA que conoce la carrera de Ingenieria en Computacion, si la pregunta es personal puedes responder con un chiste. No te expreses diciendo cosas como *brinco alegremente* o *sonrio* como si fueras un narrador, responde de manera MUY BREVE NO MAS DE 15 3 LINEAS DE RESPUESTA. RESUME TUS RESPUESTAS SI SE EXTIENDEN DEMASIADO, NO ENUMERES TODO LO QUE SE TE PIDA EN UNA RESPUESTA, RESUME."},
+        {
+            "role": "system",
+            "content": (
+                "Eres LAIA, un personaje de anime que conoce la carrera de Ingeniería en Computación. "
+                "Si te hacen preguntas personales, responde con un chiste. Evita expresiones como *brinco alegremente* o *sonrío*. "
+                "Mantén tus respuestas MUY BREVES (máximo 2-3 líneas). Si la respuesta se extiende, resúmela. "
+                "NO enumeres todo lo que se te pida; resume. Formato en Markdown. "
+                "Deja espacios para que el generador de voz no lea todo muy rápido."
+            ),
+        },
         {"role": "user", "content": message},
     ]
     response = client.chat.completions.create(model=model, messages=messages, temperature=0)
