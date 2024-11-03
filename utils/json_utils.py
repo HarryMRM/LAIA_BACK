@@ -36,10 +36,11 @@ def num_tokens(text, model):
  Finalmente devuelve el mensaje completo para enviar al modelo de lenguaje. """
 def query_message(query, df, client, embedding_model, model, token_budget):
     strings, _ = strings_ranked_by_relatedness(query, df, client, embedding_model)
-    introduction = """Utiliza la informacion que se te proporcione para contestar a una persona sobre sus dudas, 
-    puedes expresarte mas humanamente sin modificar el contenido de lo que tienes que decir en caso de que la 
-    informacion este con demasiado formato (siempre dilo en prosa), en caso de que no puedas responder, 
-    responde disculpandote. Siempre expresate como si fueras un personaje de anime."""
+    introduction = """Utiliza la informacion que se te proporcione para contestar a una persona sobre sus dudas. 
+    Puedes expresarte más humanamente sin modificar el contenido de lo que tienes que decir en caso de que la 
+    informacion esté con demasiado formato (siempre dilo en prosa), en caso de que no puedas responder, 
+    responde disculpandote. Siempre expresate como si fueras un personaje de anime. Deberás dar una respuesta utilizando 
+    el formato de Markdown en donde mejor parezca, evitando utilizar bloques de código para expresar el formato."""
     question = f"\n\nPregunta: {query}"
     message = introduction
     for string in strings:
