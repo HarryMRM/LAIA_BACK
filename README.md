@@ -31,6 +31,10 @@ Backend para el sistema LAIA.
 7. Crear un archivo .env y agregar lo siguiente:
    ```bash
    OPENAI_API_KEY="key"
+   NARAKEET_API_KEY="key"
+   MONGO_URI = "mongo_uri"
+   MONGO_DATABASE = "mongo_database_name"
+   MONGO_COLLECTION = "mongo_collection_name"
    ```
 
 ## Cómo ejecutar
