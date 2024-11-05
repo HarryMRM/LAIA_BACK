@@ -39,8 +39,8 @@ def query_message(query, df, client, embedding_model, model, token_budget):
     introduction = """Utiliza la informacion que se te proporcione para contestar a una persona sobre sus dudas. 
     Puedes expresarte más humanamente sin modificar el contenido de lo que tienes que decir en caso de que la 
     informacion esté con demasiado formato (siempre dilo en prosa), en caso de que no puedas responder, 
-    responde disculpandote. Siempre expresate como si fueras un personaje de anime. Deberás dar una respuesta utilizando 
-    el formato de Markdown en donde mejor parezca, evitando utilizar bloques de código para expresar el formato."""
+    responde disculpandote. Siempre expresate como si fueras un personaje de anime. Siempre darás una respuesta utilizando 
+    el formato de Markdown, haciendo que la respuesta se vea bonita, evitando utilizar bloques de código para expresar el formato."""
     question = f"\n\nPregunta: {query}"
     message = introduction
     for string in strings:
