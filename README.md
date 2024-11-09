@@ -1,26 +1,31 @@
 # Backend para el sistema LAIA.
+
 Backend para el sistema LAIA.
 
 ## Requerimientos
-- Python 3.12.5
-- pip 24.2
+
+-   Python 3.12.5
+-   pip 24.2
 
 ## Instalación
+
 1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/laia-backend.git
-   cd laia-backend
-   ```
+    ```bash
+    git clone https://github.com/tu-usuario/laia-backend.git
+    cd laia-backend
+    ```
 2. Crear y activar un entorno virtual:
-   ```bash
-   python -m venv .venv
-   .\.venv\Scripts\activate
-   ```
+
+    ```bash
+    python -m venv .venv
+    .\.venv\Scripts\activate
+    ```
 
 3. Instalar las dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
+
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 4. Crea una carpeta audio en la raiz.
 
@@ -29,24 +34,28 @@ Backend para el sistema LAIA.
 6. Cambia el archivo openai_client.py segun el nombre del archivo.
 
 7. Crear un archivo .env y agregar lo siguiente:
-   ```bash
-   OPENAI_API_KEY="key"
-   NARAKEET_API_KEY="key"
-   MONGO_URI = "mongo_uri"
-   MONGO_DATABASE = "mongo_database_name"
-   MONGO_COLLECTION = "mongo_collection_name"
-   ```
+    ```bash
+    OPENAI_API_KEY="key"
+    NARAKEET_API_KEY="key"
+    MONGO_URI = "mongo_uri"
+    MONGO_DATABASE = "mongo_database_name"
+    MONGO_COLLECTION = "mongo_collection_name"
+    RESEND_API_KEY = 'resend_api_key'
+    ```
 
 ## Cómo ejecutar
+
 1. Activar el entorno virtual:
-   ```bash
-   .\.venv\Scripts\activate
-   ```
+
+    ```bash
+    .\.venv\Scripts\activate
+    ```
 
 2. Ejecutar la aplicación Flask:
-   ```bash
-   flask run
-   ```
+    ```bash
+    flask run
+    ```
 
 ## Diagrama de arquitectura y documentación
+
 https://docs.google.com/document/d/1fsHj1lpDwu_kNGZiXYktd8fZ1TuaJ0GAI0N5jz-fsEE/edit?usp=sharing
