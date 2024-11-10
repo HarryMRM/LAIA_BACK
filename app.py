@@ -7,6 +7,7 @@ from flask import Flask
 from flask_cors import CORS
 from routes.response_ai import response_ai_route
 from routes.response_mongodb import response_mongodb_route
+from routes.user_routes import user_routes  # Importa el nuevo módulo de rutas
 
 """Se crea la aplicación flask y se habilita CORS para otorgar los permisos necesarios que sean requeridos por
 los dominios del front end. 
