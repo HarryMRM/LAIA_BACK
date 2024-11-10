@@ -6,7 +6,6 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 from services.mongodb import insertDocument, readDocuments, deleteAllDocuments
 response_mongodb_route = Blueprint('messages_database', __name__)
-import time
 
 """
 Se crea un blueprint para las rutas de la base de datos.
