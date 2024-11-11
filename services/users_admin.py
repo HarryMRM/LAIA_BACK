@@ -1,7 +1,7 @@
 """Primero se importa la pymongo openai la cual proporciona acceso a las funcionalidades de MongoDB.
-Se importan MONGO_URI, MONGO_DATABASE_MSG, y MONGO_COLLECTION_MSG las cuales permiten autentificar las solicitudes a MongoDB."""
+Se importan MONGO_URI, MONGO_DATABASE_USR, y MONGO_COLLECTION_USR las cuales permiten autentificar las solicitudes a MongoDB."""
 import pymongo
-from config import MONGO_URI, MONGO_DATABASE_MSG, MONGO_COLLECTION_MSG
+from config import MONGO_URI, MONGO_DATABASE_USR, MONGO_COLLECTION_USR
 
 """ Se establece un tiempo de espera límite de 1000 milisegundos (1 segundo) para la conexión con la base de datos """
 TIMEOUT = 1000
@@ -24,8 +24,8 @@ except pymongo.errors.OperationFailure as operationError:
 Se conecta el cliente con la colección de la base de datos
 """
 try:
-  db = cliente[MONGO_DATABASE_MSG]
-  collection = db[MONGO_COLLECTION_MSG]
+  db = cliente[MONGO_DATABASE_USR]
+  collection = db[MONGO_COLLECTION_USR]
   
 except pymongo.errors.CollectionInvalid as collectionError:
   print(f"Error al conectar con la colección: {collectionError}")
@@ -47,34 +47,3 @@ def insertDocument(doc):
     
   except pymongo.errors.ConnectionFailure as connectionError:
     print(f"Error al insertar el documento: {connectionError}")
-
-
-"""
-Se define una función la cual se encarga de leer todos los documentos de la colección
-No recibe parámetros
-Retorna una lista con los objetos presentes en la base de datos
-"""
-def readDocuments():
-  try:
-    documents = list(collection.find().sort("createdAt", pymongo.ASCENDING))
-    for document in documents:
-      document["_id"] = str(document.get("_id"))
-    
-    return documents
-  
-  except pymongo.errors.ConnectionFailure as connectionError:
-    print(f"Error al leer los documentos: {connectionError}")
-
-
-"""
-Se define una función la cual se encarga de eliminar todos los documentos de la colección
-No recibe parámetros
-No tiene retorno
-"""
-def deleteAllDocuments():
-  try:
-    deleteResult = collection.delete_many(filter={})
-    return deleteResult.deleted_count
-    
-  except pymongo.errors.ConnectionFailure as connectionError:
-    print(f"Error al borrar el documento: {connectionError}")
