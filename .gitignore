@@ -24,3 +24,5 @@ instance/
 *.db
 data/*
 audio/*
+cert.pem
+key.pem
