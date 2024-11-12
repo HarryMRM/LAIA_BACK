@@ -15,8 +15,13 @@ Despues se ignoran las advertencias de tipo: DeprecationWarning."""
 load_dotenv()
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 NARAKEET_API_KEY = os.getenv('NARAKEET_API_KEY')
+
 MONGO_URI = os.getenv('MONGO_URI')
-MONGO_DATABASE = os.getenv('MONGO_DATABASE')
-MONGO_COLLECTION = os.getenv('MONGO_COLLECTION')
+
+MONGO_DATABASE_MSG = os.getenv('MONGO_DATABASE_MSG')
+MONGO_COLLECTION_MSG = os.getenv('MONGO_COLLECTION_MSG')
+
+MONGO_DATABASE_USR = os.getenv('MONGO_DATABASE_USR')
+MONGO_COLLECTION_USR = os.getenv('MONGO_COLLECTION_USR')
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
