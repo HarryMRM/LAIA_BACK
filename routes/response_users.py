@@ -1,29 +1,69 @@
 # routes/response_users.py
 from flask import Blueprint, request, jsonify
-# from services.users_admin import 
-response_users = Blueprint('response_users', __name__)
+from services.users_admin import create_user, validate_user, update_user, delete_user
+response_users_route = Blueprint('response_users', __name__)
 
-@response_users.route('/api/response_users', methods=['POST'])
-def create_user():
-    data = request.json
-    # Lógica para crear un usuario (puedes reemplazar esto con llamada a un controlador)
-    return jsonify({"message": "Usuario creado", "data": data}), 201
+@response_users_route.route('/api/response_users', methods=['POST'])
+def create_a_user():
+    try:
+        data = request.get_json()
 
+        if ("user" not in data) or ("password" not in data):
+            return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
 
-@response_users.route('/api/response_users/user_id/<string:user_id>', methods=['GET'])
-def get_user(user_id):
-    # Lógica para obtener un usuario por ID (puedes agregar acceso a DB)
-    return jsonify({"message": f"Obteniendo usuario con ID {user_id}"})
-
-
-@response_users.route('/api/response_users/user_id/<string:user_id>', methods=['PUT'])
-def update_user(user_id):
-    data = request.json
-    # Lógica para actualizar un usuario
-    return jsonify({"message": f"Usuario con ID {user_id} actualizado", "data": data})
+        created = create_user(data)
+        return jsonify(created), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
-@response_users.route('/api/response_users/user_id/<string:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    # Lógica para eliminar un usuario
-    return jsonify({"message": f"Usuario con ID {user_id} eliminado"})
+@response_users_route.route('/api/response_users', methods=['GET'])
+def validate_a_user():
+    try:
+        data = request.get_json()
+
+        if ("user" not in data) or ("password" not in data):
+            return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
+        
+        validated = validate_user(data)
+        return jsonify(validated), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@response_users_route.route('/api/response_users', methods=['PUT'])
+def update_a_user():
+    try:
+        data = request.get_json()
+
+        if ("user" not in data) or ("password" not in data):
+            return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
+        
+        if ("new_user" not in data) and ("new_password" not in data):
+            return jsonify({"error": "Se necesita un nuevo usuario (new_user) o una nueva contraseña (new_password)"}), 400
+        
+        if ("new_password" in data) and ("code" not in data):
+            return jsonify({"error": "Se necesita un código de validación para cambiar la contraseña"}), 400
+
+        updated = update_user(data)
+        return jsonify(updated), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@response_users_route.route('/api/response_users', methods=['DELETE'])
+def delete_a_user():
+    try:
+        data = request.get_json()
+
+        if ("user" not in data) or ("password" not in data):
+            return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
+        
+        deleted = delete_user(data)
+        return jsonify(deleted), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

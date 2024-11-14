@@ -11,7 +11,7 @@ Se conecta con el cliente de la base de datos
 """
 try:
   cliente = pymongo.MongoClient(MONGO_URI, serverSelectionTimeoutMS = TIMEOUT)
-  print("Conexión con la base de datos establecida!")
+  print("Conexión con la base de datos de mensajes establecida!")
 
 except pymongo.errors.ServerSelectionTimeoutError as timeError:
   print(f"Tiempo excedido: {timeError}")
