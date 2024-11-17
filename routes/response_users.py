@@ -12,7 +12,11 @@ def create_a_user():
             return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
 
         created = create_user(data)
-        return jsonify(created), 200
+        
+        if 'error' in created:
+            return jsonify(created), 400
+        else:
+            return jsonify(created), 200
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -27,7 +31,11 @@ def validate_a_user():
             return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
         
         validated = validate_user(data)
-        return jsonify(validated), 200
+        
+        if 'error' in validated:
+            return jsonify(validated), 400
+        else:
+            return jsonify(validated), 200
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -48,7 +56,11 @@ def update_a_user():
             return jsonify({"error": "Se necesita un código de validación para cambiar la contraseña"}), 400
 
         updated = update_user(data)
-        return jsonify(updated), 200
+        
+        if 'error' in updated:
+            return jsonify(updated), 400
+        else:
+            return jsonify(updated), 200
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -63,7 +75,11 @@ def delete_a_user():
             return jsonify({"error": "Se necesita un usuario (user) y contraseña (password)"}), 400
         
         deleted = delete_user(data)
-        return jsonify(deleted), 200
+        
+        if 'error' in deleted:
+            return jsonify(deleted), 400
+        else:
+            return jsonify(deleted), 200
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
