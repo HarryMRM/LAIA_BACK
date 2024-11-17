@@ -35,7 +35,15 @@ def validate_a_user():
         if 'error' in validated:
             return jsonify(validated), 400
         else:
-            return jsonify(validated), 200
+            access_token = "access_token"
+            refresh_token = "refresh_token"
+            user = {
+                "uid": validated.get("_id"),
+                "user": validated.get("user")
+            }
+            return jsonify({"user": user,
+                            "access_token": access_token,
+                            "refresh_token": refresh_token}), 200
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500

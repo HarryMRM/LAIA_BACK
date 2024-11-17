@@ -95,14 +95,18 @@ def validate_user(doc):
     if user_exists(doc.get("user")): #If the user exists
       
       if correct_password(doc.get("user"), doc.get("password")): #If the password is correct
-        return {"message": "Usuario validado"}
-      
+
+        validated = collection.find_one({"user": doc.get("user")})
+        validated["_id"] = str(validated.get("_id"))
+
+        return validated
+
       else:
         return {"error": "Contraseña incorrecta"}
-    
+
     else:
       return {"error": "Usuario no encontrado"}
-  
+
   except pymongo.errors.ConnectionFailure as connectionError:
     print(f"Error al leer los documentos: {connectionError}")
 
