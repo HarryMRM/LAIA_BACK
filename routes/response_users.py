@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 from services.users_admin import create_user, validate_user, update_user, delete_user
 response_users_route = Blueprint('response_users', __name__)
 
-@response_users_route.route('/api/response_users', methods=['POST'])
+@response_users_route.route('/api/response_users/new', methods=['POST'])
 def create_a_user():
     try:
         data = request.get_json()
@@ -22,7 +22,7 @@ def create_a_user():
         return jsonify({"error": str(e)}), 500
 
 
-@response_users_route.route('/api/response_users', methods=['GET'])
+@response_users_route.route('/api/response_users/validate', methods=['POST'])
 def validate_a_user():
     try:
         data = request.get_json()
