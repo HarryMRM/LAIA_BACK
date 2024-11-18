@@ -74,3 +74,21 @@ def ask(query, df, client, embedding_model, model, token_budget=3596):
     ]
     response = client.chat.completions.create(model=model, messages=messages, temperature=0)
     return response.choices[0].message.content
+
+def ask_ollama(query, df, client, clientEmb, embedding_model, model, token_budget=3596):
+    message = query_message(query, df, clientEmb, embedding_model, model, token_budget)
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "Eres LAIA, un personaje de anime que conoce la carrera de Ingeniería en Computación. "
+                "Si te hacen preguntas personales, responde con un chiste. Evita expresiones como *brinco alegremente* o *sonrío*. "
+                "Mantén tus respuestas MUY BREVES (máximo 2-3 líneas). Si la respuesta se extiende, resúmela. "
+                "NO enumeres todo lo que se te pida; resume. Formato en Markdown. "
+                "Deja espacios para que el generador de voz no lea todo muy rápido."
+            ),
+        },
+        {"role": "user", "content": message},
+    ]
+    response = client.chat(model=model, messages=messages)
+    return response['message']['content']
