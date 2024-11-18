@@ -107,8 +107,8 @@ def validate_user(doc):
 
         return validated
 
-      else:
-        return {"error": "Contraseña incorrecta"}
+      else: #If the password is not correct
+        return {"error": "Usuario y/o Contraseña incorrectos"}
 
     else:
       return {"error": "Usuario no encontrado"}
@@ -191,8 +191,8 @@ def delete_user(doc):
         print(f"Usuario eliminado: {deleted}")
         return deleted
 
-      else:
-        return {"error": "Contraseña incorrecta"}
+      else: #If the password is not correct
+        return {"error": "Usuario y/o Contraseña incorrectos"}
 
     else:
       return {"error": "Usuario no encontrado"}
