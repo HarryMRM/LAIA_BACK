@@ -25,15 +25,12 @@ def response_ai():
         # Validar entrada
         if 'input_text' not in data:
             return jsonify({"error": "Input text not provided"}), 400
+        if 'voice_model' not in data or 'ia_model' not in data:
+            return jsonify({"error": "Missing model selectors"}), 400
 
         input_text = data['input_text']
-        voice_model = data.get('voice_model')  # Tomar del JSON si está presente
-        ia_model = data.get('ia_model', 'openai')  # Predeterminado a openai
-
-        # Compatibilidad con voice_flag
-        if voice_model is None:
-            voice_flag = data.get('voice_flag', 0)
-            voice_model = 'narakeet' if voice_flag == 1 else 'openai'
+        voice_model = data['voice_model']
+        ia_model = data['ia_model']
 
         # Generar respuesta de IA según el modelo seleccionado
         if ia_model == "openai":
