@@ -21,20 +21,48 @@ junto con el codigo 500, error interno del servidor. """
 def response_ai():
     try:
         data = request.get_json()
+
+        # Validar entrada
         if 'input_text' not in data:
             return jsonify({"error": "Input text not provided"}), 400
+        if 'voice_model' not in data or 'ia_model' not in data:
+            return jsonify({"error": "Missing model selectors"}), 400
+
         input_text = data['input_text']
-        response_text = openai_response(input_text)
-        response_text_fix = convert_text(response_text)
-        if voice_flag == 1:
-            speech_file_path = narakeet_speech(response_text_fix)
+        voice_model = data['voice_model']
+        ia_model = data['ia_model']
+
+        # Generar respuesta de IA según el modelo seleccionado
+        if ia_model == "openai":
+            response_text = openai_response(input_text)
         else:
+            return jsonify({"error": f"Unsupported IA model: {ia_model}"}), 400
+
+        response_text_fix = convert_text(response_text)
+
+        # Generar audio según el modelo de voz seleccionado
+        if voice_model == "narakeet":
+            speech_file_path = narakeet_speech(response_text_fix)
+        elif voice_model == "openai":
             speech_file_path = openai_speech(response_text_fix)
+        elif voice_model == "none":
+            # Sin voz, devolver solo texto
+            return jsonify({
+                "input_text": response_text,
+                "audio_path": None,
+                "audio_file": None
+            }), 200
+        else:
+            return jsonify({"error": f"Unsupported voice model: {voice_model}"}), 400
+
+        # Convertir archivo de audio a base64
         audio_base64 = convert_file_to_base64(speech_file_path)
+
         return jsonify({
             "input_text": response_text,
             "audio_path": request.url_root + 'speech-result.mp3',
             "audio_file": audio_base64
         }), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
