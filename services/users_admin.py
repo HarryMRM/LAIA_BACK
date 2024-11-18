@@ -2,6 +2,7 @@
 Se importan MONGO_URI, MONGO_DATABASE_USR, y MONGO_COLLECTION_USR las cuales permiten autentificar las solicitudes a MongoDB."""
 import pymongo
 from config import MONGO_URI, MONGO_DATABASE_USR, MONGO_COLLECTION_USR
+from utils.crypt_data import encrypt_data, decrypt_data, data_equals_encrypted
 
 """ Se establece un tiempo de espera límite de 1000 milisegundos (1 segundo) para la conexión con la base de datos """
 TIMEOUT = 1000
@@ -45,6 +46,7 @@ def user_exists(user):
   
   except pymongo.errors.ConnectionFailure as connectionError:
     print(f"Error al insertar el documento: {connectionError}")
+    return False
 
 
 """
@@ -53,14 +55,15 @@ Se define una función la cual valida la contraseña de un usuario
 def correct_password(user, password):
   try:
     user_data = collection.find_one({"user": user})
-    
-    if (user_data.get("password") == password):
+
+    if data_equals_encrypted(password, user_data.get("password")):
       return True #If the password is correct
     else:
       return False #If the password is not correct
   
   except pymongo.errors.ConnectionFailure as connectionError:
     print(f"Error al insertar el documento: {connectionError}")
+    return False
 
 
 """
@@ -71,10 +74,12 @@ Retorna el usuario insertado o un mensaje de error
 def create_user(doc):
   try:
     if not user_exists(doc.get("user")): #If the user not exists
+      doc["password"] = encrypt_data(doc.get("password"))
       resp = collection.insert_one(doc)
       
       inserted = collection.find_one({"_id": resp.inserted_id})
       inserted["_id"] = str(inserted.get("_id"))
+      inserted["password"] = str(inserted.get("password"))
       
       return inserted
     
@@ -82,7 +87,7 @@ def create_user(doc):
       return {"error": "El usuario ya existe"}
     
   except pymongo.errors.ConnectionFailure as connectionError:
-    print(f"Error al insertar el documento: {connectionError}")
+    return {"error": f"Error al insertar el documento:\n{connectionError}"}
 
 
 """
@@ -98,6 +103,7 @@ def validate_user(doc):
 
         validated = collection.find_one({"user": doc.get("user")})
         validated["_id"] = str(validated.get("_id"))
+        validated["password"] = str(validated.get("password"))
 
         return validated
 
@@ -108,7 +114,7 @@ def validate_user(doc):
       return {"error": "Usuario no encontrado"}
 
   except pymongo.errors.ConnectionFailure as connectionError:
-    print(f"Error al leer los documentos: {connectionError}")
+    return {"error": f"Error al validar el usuario:\n{connectionError}"}
 
 
 """
@@ -121,14 +127,17 @@ def update_user(doc):
     if user_exists(doc.get("user")):
       if "new_password" in doc:
         if True: #Validar codigo de confirmación
-          if doc.get("new_password") != doc.get("password"):
+          if not data_equals_encrypted(doc.get("new_password"), doc.get("password")):
             #Update the password
+            doc["new_password"] = encrypt_data(doc.get("new_password"))
+            
             updated = collection.update_one(
               filter={"user": doc.get("user")},
               update={"$set": {"password": doc.get("new_password")}}
             )
             updated = collection.find_one({"user": doc.get("user")})
             updated["_id"] = str(updated.get("_id"))
+            updated["password"] = str(updated.get("password"))
             return updated
           
           else:
@@ -162,7 +171,7 @@ def update_user(doc):
       return {"error": "Usuario no encontrado"}
     
   except pymongo.errors.ConnectionFailure as connectionError:
-    print(f"Error al borrar el documento: {connectionError}")
+    return {"error": f"Error al actualizar el usuario:\n{connectionError}"}
 
 
 """
@@ -176,6 +185,7 @@ def delete_user(doc):
       if correct_password(doc.get("user"), doc.get("password")):
         deleted = collection.find_one({"user": doc.get("user")})
         deleted["_id"] = str(deleted.get("_id"))
+        deleted["password"] = str(deleted.get("password"))
 
         collection.delete_one({"user": doc.get("user")})
         print(f"Usuario eliminado: {deleted}")
@@ -188,4 +198,4 @@ def delete_user(doc):
       return {"error": "Usuario no encontrado"}
 
   except pymongo.errors.ConnectionFailure as connectionError:
-    print(f"Error al borrar el documento: {connectionError}")
+    return {"error": f"Error al eliminar el usuario:\n{connectionError}"}
