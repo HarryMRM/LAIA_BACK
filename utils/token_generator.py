@@ -35,7 +35,7 @@ def decode(encoded_jwt, is_access_token):  # secret es la clave secreta
         )
 
     except jwt.ExpiredSignatureError:
-        return "Token has expired"
+        return None
 
 
 """
@@ -58,3 +58,21 @@ Retorna un token o un error
 
 def create_refresh_token(doc):
     return sign(doc, False)
+
+
+"""
+Se define una función la cual se encarga de verificar un token de acceso
+"""
+
+
+def verify_access_token(token):
+    return decode(token, True)
+
+
+"""
+Se define una función la cual se encarga de verificar un token de recarga
+"""
+
+
+def verify_refresh_token(token):
+    return decode(token, False)
