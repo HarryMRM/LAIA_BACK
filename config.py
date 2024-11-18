@@ -23,8 +23,8 @@ MONGO_COLLECTION_MSG = os.getenv('MONGO_COLLECTION_MSG')
 
 MONGO_DATABASE_USR = os.getenv('MONGO_DATABASE_USR')
 MONGO_COLLECTION_USR = os.getenv('MONGO_COLLECTION_USR')
+MONGO_COLLECTION_TKN = os.getenv('MONGO_COLLECTION_TKN')
 
-# CRYPTING_KEY = os.getenv('CRYPTING_KEY')
 CRYPTING_KEY = os.getenv("CRYPTING_KEY").strip().replace("b'", "").replace("'", "").encode()
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)

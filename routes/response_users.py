@@ -1,6 +1,7 @@
 # routes/response_users.py
 from flask import Blueprint, request, jsonify
 from services.users_admin import create_user, validate_user, update_user, delete_user
+from services.token_admin import get_access_token, get_refresh_token
 response_users_route = Blueprint('response_users', __name__)
 
 @response_users_route.route('/api/response_users/new', methods=['POST'])
@@ -35,12 +36,12 @@ def validate_a_user():
         if 'error' in validated:
             return jsonify(validated), 400
         else:
-            access_token = "access_token"
-            refresh_token = "refresh_token"
             user = {
                 "uid": validated.get("_id"),
                 "user": validated.get("user")
             }
+            access_token = get_access_token(user)
+            refresh_token = get_refresh_token(user)
             return jsonify({"user": user,
                             "access_token": access_token,
                             "refresh_token": refresh_token}), 200

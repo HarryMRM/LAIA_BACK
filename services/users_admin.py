@@ -3,7 +3,6 @@ Se importan MONGO_URI, MONGO_DATABASE_USR, y MONGO_COLLECTION_USR las cuales per
 import pymongo
 from config import MONGO_URI, MONGO_DATABASE_USR, MONGO_COLLECTION_USR
 from utils.crypt_data import encrypt_data, decrypt_data, data_equals_encrypted
-from utils.token_generator import create_access_token, create_refresh_token
 
 """ Se establece un tiempo de espera límite de 1000 milisegundos (1 segundo) para la conexión con la base de datos """
 TIMEOUT = 1000
