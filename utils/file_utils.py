@@ -1,4 +1,5 @@
 """Primero se importa base64 la cual codifica datos en base64."""
+
 import base64
 
 """Se define la llamada de funcion y recibe como parametro la ruta del archivo.
