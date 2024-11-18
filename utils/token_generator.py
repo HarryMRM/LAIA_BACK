@@ -6,8 +6,8 @@ Se define una función la cual se encarga de crear una firma jwt
 Recibe 
 Retorna un token o un error
 """
-def sign(doc):
-    return jwt.encode({"some": "payload"}, "secret", algorithm="HS256")
+def sign(payload): #secret es la clave secreta
+    return jwt.encode({"some": payload}, "secret", algorithm="HS256", expires_in=3600)
 
 
 """
@@ -15,7 +15,7 @@ Se define una función la cual se encarga de crear una firma jwt
 Recibe 
 Retorna un token o un error
 """
-def decode(encoded_jwt):
+def decode(encoded_jwt): #secret es la clave secreta
     return jwt.decode(encoded_jwt, "secret", algorithms=["HS256"])
 
 
