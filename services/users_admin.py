@@ -61,7 +61,8 @@ def correct_password(user, password):
     try:
         user_data = collection.find_one({"user": user})
 
-        if data_equals_encrypted(password, user_data.get("password")):
+        # if data_equals_encrypted(password, user_data.get("password")):
+        if password == user_data.get("password"):
             return True  # If the password is correct
         else:
             return False  # If the password is not correct
@@ -81,7 +82,7 @@ Retorna el usuario insertado o un mensaje de error
 def create_user(doc):
     try:
         if not user_exists(doc.get("user")):  # If the user not exists
-            doc["password"] = encrypt_data(doc.get("password"))
+            # doc["password"] = encrypt_data(doc.get("password"))
             resp = collection.insert_one(doc)
 
             inserted = collection.find_one({"_id": resp.inserted_id})
@@ -107,15 +108,12 @@ Retorna un mensaje indicando éxito o error
 def validate_user(doc):
     try:
         if user_exists(doc.get("user")):  # If the user exists
-
             if correct_password(
                 doc.get("user"), doc.get("password")
             ):  # If the password is correct
-
                 validated = collection.find_one({"user": doc.get("user")})
                 validated["_id"] = str(validated.get("_id"))
                 validated["password"] = str(validated.get("password"))
-
                 return validated
 
             else:  # If the password is not correct
@@ -140,11 +138,12 @@ def update_user(doc):
         if user_exists(doc.get("user")):
             if "new_password" in doc:
                 if True:  # Validar codigo de confirmación
-                    if not data_equals_encrypted(
-                        doc.get("new_password"), doc.get("password")
-                    ):
+                    if not (doc.get("new_password") == doc.get("password")):
+                    # if not data_equals_encrypted(
+                    #     doc.get("new_password"), doc.get("password")
+                    # ):
                         # Update the password
-                        doc["new_password"] = encrypt_data(doc.get("new_password"))
+                        # doc["new_password"] = encrypt_data(doc.get("new_password"))
 
                         updated = collection.update_one(
                             filter={"user": doc.get("user")},
@@ -209,7 +208,6 @@ def delete_user(doc):
                 deleted["password"] = str(deleted.get("password"))
 
                 collection.delete_one({"user": doc.get("user")})
-                print(f"Usuario eliminado: {deleted}")
                 return deleted
 
             else:  # If the password is not correct
