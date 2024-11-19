@@ -1,5 +1,6 @@
 import jwt  # type: ignore
 import datetime
+from config import TKN_EXP, ACCESS_SECRET, REFRESH_SECRET
 
 """
 Se define una función la cual se encarga de crear una firma jwt
@@ -10,11 +11,11 @@ Retorna un token o un error
 
 def sign(payload, is_access_token):  # secret es la clave secreta
     expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-        seconds=3600
-    )  # Token expira en 3600 segundos (60 minutos o 1 hora)
+        minutes=TKN_EXP
+    )  # Token expira en ? minutos
     return jwt.encode(
         {"some": payload, "exp": expiration},
-        "access" if is_access_token else "refresh",
+        ACCESS_SECRET if is_access_token else REFRESH_SECRET,
         algorithm="HS256",
     )
 
@@ -28,11 +29,12 @@ Retorna la carga tokenizada o un error de expiración
 
 def decode(encoded_jwt, is_access_token):  # secret es la clave secreta
     try:
-        return jwt.decode(
+        decoded = jwt.decode(
             encoded_jwt,
-            "access" if is_access_token else "refresh",
+            ACCESS_SECRET if is_access_token else REFRESH_SECRET,
             algorithms=["HS256"],
         )
+        return decoded.get("some")
 
     except jwt.ExpiredSignatureError:
         return None

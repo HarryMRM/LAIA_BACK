@@ -27,4 +27,8 @@ MONGO_COLLECTION_TKN = os.getenv('MONGO_COLLECTION_TKN')
 
 CRYPTING_KEY = os.getenv("CRYPTING_KEY").strip().replace("b'", "").replace("'", "").encode()
 
+TKN_EXP = int(os.getenv("TKN_EXP"))
+ACCESS_SECRET = os.getenv("ACCESS_SECRET")
+REFRESH_SECRET = os.getenv("REFRESH_SECRET")
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
