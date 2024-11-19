@@ -39,7 +39,8 @@ def create_a_user():
             return jsonify(created), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
 
 
 @response_users_route.route("/api/response_users/validate", methods=["POST"])
@@ -56,6 +57,7 @@ def validate_a_user():
             )
 
         validated = validate_user(data)
+        print(validated)
 
         if "error" in validated:
             return jsonify(validated), 400
@@ -75,7 +77,8 @@ def validate_a_user():
             )
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
 
 
 @response_users_route.route("/api/response_users/refresh-token", methods=["POST"])
@@ -100,7 +103,8 @@ def get_a_new_access_token():
             )
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
 
 
 @response_users_route.route("/api/response_users/user", methods=["GET"])
@@ -110,11 +114,12 @@ def get_the_user_info():
         if user:
             if "error" not in user:
                 return (
-                    jsonify({user}),
+                    jsonify(user),
                     200,
                 )
             else:
-                return jsonify({user}), 500
+                print(f"Error: {user}")
+                return jsonify(user), 500
         else:
             return (
                 jsonify({"error": "No se ha proporcionado un token válido"}),
@@ -122,7 +127,8 @@ def get_the_user_info():
             )
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
 
 
 @response_users_route.route("/api/response_users", methods=["PUT"])
@@ -166,7 +172,8 @@ def update_a_user():
             return jsonify(updated), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
 
 
 @response_users_route.route("/api/response_users", methods=["DELETE"])
@@ -190,4 +197,5 @@ def delete_a_user():
             return jsonify(deleted), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
