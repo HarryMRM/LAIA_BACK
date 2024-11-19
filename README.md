@@ -37,10 +37,20 @@ Backend para el sistema LAIA.
     ```bash
     OPENAI_API_KEY="key"
     NARAKEET_API_KEY="key"
+
     MONGO_URI = "mongo_uri"
-    MONGO_DATABASE = "mongo_database_name"
-    MONGO_COLLECTION = "mongo_collection_name"
+    MONGO_DATABASE_MSG = "mongo_messages_database_name"
+    MONGO_COLLECTION_MSG = "mongo_messages_collection_name"
+    MONGO_DATABASE_USR = "mongo_users_database_name"
+    MONGO_COLLECTION_USR = "mongo_users_collection_name"
+    MONGO_COLLECTION_TKN = "mongo_tokens_collection_name"
+    
     RESEND_API_KEY = 'resend_api_key'
+
+    CRYPTING_KEY = crypting key in python bytes
+    TKN_EXP = expiration minutes for tokens in int
+    ACCESS_SECRET = "access_token_secret"
+    REFRESH_SECRET = "refresh_token_secret"
     ```
 
 ## Cómo ejecutar
