@@ -84,6 +84,21 @@ def get_new_access_token(refresh_token):
 
 
 """
+Se define una función la cual se encarga de eliminar el token de la base de datos
+"""
+
+
+def remove_token(token):
+    try:
+        collection.delete_one({"token": token})
+        return True
+    
+    except pymongo.errors.ConnectionFailure as connectionError:
+        print(f"Error al insertar el documento: {connectionError}")
+        return False
+
+
+"""
 Se define una función la cual se encarga de obtener el token del header
 """
 

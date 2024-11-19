@@ -12,6 +12,7 @@ from services.token_admin import (
     get_refresh_token,
     get_new_access_token,
     get_token_from_headers,
+    remove_token,
 )
 from utils.authenticate import authenticate
 
@@ -57,7 +58,6 @@ def validate_a_user():
             )
 
         validated = validate_user(data)
-        print(validated)
 
         if "error" in validated:
             return jsonify(validated), 400
@@ -195,6 +195,35 @@ def delete_a_user():
             return jsonify(deleted), 400
         else:
             return jsonify(deleted), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
+
+
+@response_users_route.route("/api/response_users/signout", methods=["DELETE"])
+def delete_a_session():
+    try:
+        headers = request.headers
+        refresh_token = get_token_from_headers(headers)
+
+        if refresh_token:
+            removed_token = remove_token(refresh_token)
+            if removed_token:
+                return (
+                    jsonify({"msg": "Sesión cerrada exitosamente"}),
+                    200,
+                )
+            else:
+                return (
+                    jsonify({"error": "No se ha podido cerrar la sesión"}),
+                    401,
+                )
+        else:
+            return (
+                jsonify({"error": "No se ha podido cerrar la sesión. No existe un token"}),
+                401,
+            )
 
     except Exception as e:
         print(f"Error: {e}")
