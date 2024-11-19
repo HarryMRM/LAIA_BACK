@@ -34,8 +34,12 @@ def encrypt_data(data):
 Se define una función la cual se encarga de desencriptar la información
 """
 def decrypt_data(encrypted_data):
-    # print(f"decrypt_data: {type(encrypted_data)}-{encrypted_data}")
-    return encrypter.decrypt(encrypted_data).decode()
+    try:
+        return encrypter.decrypt(encrypted_data).decode()
+    
+    except Exception as e:
+        print(f"decrypt_data error: {e}")
+        return None
 
 
 """
@@ -44,5 +48,4 @@ la información encriptada con la información no encriptada
 Retorna True si son iguales, False en caso contrario
 """
 def data_equals_encrypted(data, encrypted_data):
-    # print(f"data_equals_encrypted: {type(data)}-{data} - {type(encrypted_data)}-{encrypted_data}")
     return data == decrypt_data(encrypted_data)

@@ -10,8 +10,7 @@ def authenticate(request):
         if token:
             decoded = verify_access_token(token)
             if decoded:
-                user = decoded.get("user")
-                return user
+                return decoded
             else:
                 return None
         else:

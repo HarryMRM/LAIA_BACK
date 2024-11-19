@@ -72,7 +72,7 @@ def get_new_access_token(refresh_token):
         if encontrado:
             payload = verify_refresh_token(encontrado.get("token"))
             if payload:
-                return create_access_token(payload.get("user"))
+                return create_access_token(payload)
             else:
                 return None
         else:
