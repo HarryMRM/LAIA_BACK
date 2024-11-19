@@ -6,7 +6,6 @@ from services.narakeet_client import generate_speech as narakeet_speech
 from utils.file_utils import convert_file_to_base64
 from utils.string_utils import convert_text
 response_ai_route = Blueprint('text_to_speech', __name__)
-voice_flag = 1
 
 """Se crea un blueprint para las rutas de texto y voz.
 se define la ruta que acepta solo solicitudes POST.
@@ -25,15 +24,19 @@ def response_ai():
         # Validar entrada
         if 'input_text' not in data:
             return jsonify({"error": "Input text not provided"}), 400
+        if 'ia_model' not in data or 'ia_model' not in data:
+            return jsonify({"error": "Missing model selectors"}), 400
         if 'voice_model' not in data or 'ia_model' not in data:
             return jsonify({"error": "Missing model selectors"}), 400
-
+        
         input_text = data['input_text']
         voice_model = data['voice_model']
         ia_model = data['ia_model']
 
         # Generar respuesta de IA según el modelo seleccionado
         if ia_model == "openai":
+            response_text = openai_response(input_text)
+        elif ia_model == "ollama":
             response_text = openai_response(input_text)
         else:
             return jsonify({"error": f"Unsupported IA model: {ia_model}"}), 400
