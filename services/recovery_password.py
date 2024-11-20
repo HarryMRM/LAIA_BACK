@@ -106,7 +106,7 @@ def recovery_password(doc):
         if user_exists(doc.get("user")):
             code = generate_code()
             send_code(doc.get("email"), doc.get("user"), code)
-            
+
             data = {"user": doc.get("user"), "code": code}
             save_recovery_password(data)
             return {"message": "Código de recuperación enviado"}
