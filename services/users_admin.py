@@ -3,7 +3,9 @@ Se importan MONGO_URI, MONGO_DATABASE_USR, y MONGO_COLLECTION_USR las cuales per
 
 import pymongo
 from config import MONGO_URI, MONGO_DATABASE_USR, MONGO_COLLECTION_USR
-from utils.crypt_data import encrypt_data, decrypt_data, data_equals_encrypted
+from services.recovery_password import validate_recovery_password, delete_recovery_password
+
+# from utils.crypt_data import encrypt_data, decrypt_data, data_equals_encrypted
 
 """ Se establece un tiempo de espera límite de 1000 milisegundos (1 segundo) para la conexión con la base de datos """
 TIMEOUT = 1000
@@ -82,7 +84,6 @@ Retorna el usuario insertado o un mensaje de error
 def create_user(doc):
     try:
         if not user_exists(doc.get("user")):  # If the user not exists
-            # doc["password"] = encrypt_data(doc.get("password"))
             resp = collection.insert_one(doc)
 
             inserted = collection.find_one({"_id": resp.inserted_id})
@@ -119,8 +120,8 @@ def validate_user(doc):
             else:  # If the password is not correct
                 return {"error": "Usuario y/o Contraseña incorrectos"}
 
-        else:
-            return {"error": "Usuario no encontrado"}
+        else:  # If the user not exists
+            return {"error": "Usuario y/o Contraseña incorrectos"}
 
     except pymongo.errors.ConnectionFailure as connectionError:
         return {"error": f"Error al validar el usuario:\n{connectionError}"}
@@ -139,12 +140,6 @@ def update_user(doc):
             if "new_password" in doc:
                 if True:  # Validar codigo de confirmación
                     if not (doc.get("new_password") == doc.get("password")):
-                    # if not data_equals_encrypted(
-                    #     doc.get("new_password"), doc.get("password")
-                    # ):
-                        # Update the password
-                        # doc["new_password"] = encrypt_data(doc.get("new_password"))
-
                         updated = collection.update_one(
                             filter={"user": doc.get("user")},
                             update={"$set": {"password": doc.get("new_password")}},
@@ -213,17 +208,8 @@ def delete_user(doc):
             else:  # If the password is not correct
                 return {"error": "Usuario y/o Contraseña incorrectos"}
 
-        else:
-            return {"error": "Usuario no encontrado"}
+        else:  # If the user not exists
+            return {"error": "Usuario y/o Contraseña incorrectos"}
 
     except pymongo.errors.ConnectionFailure as connectionError:
         return {"error": f"Error al eliminar el usuario:\n{connectionError}"}
-
-
-"""
-Se define una función la cual se encarga de obtener la información de un usuario
-"""
-
-
-def get_user_info():
-    pass

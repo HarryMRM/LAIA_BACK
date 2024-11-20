@@ -5,7 +5,6 @@ from services.users_admin import (
     validate_user,
     update_user,
     delete_user,
-    get_user_info,
 )
 from services.token_admin import (
     get_access_token,
@@ -15,6 +14,7 @@ from services.token_admin import (
     remove_token,
 )
 from utils.authenticate import authenticate
+from services.recovery_password import recovery_password
 
 response_users_route = Blueprint("response_users", __name__)
 
@@ -131,15 +131,15 @@ def get_the_user_info():
         return jsonify({"error": "Error interno del servidor"}), 500
 
 
-@response_users_route.route("/api/response_users", methods=["PUT"])
+@response_users_route.route("/api/response_users/new-data", methods=["PUT"])
 def update_a_user():
     try:
         data = request.get_json()
 
-        if ("user" not in data) or ("password" not in data):
+        if ("user" not in data) and ("password" not in data):
             return (
                 jsonify(
-                    {"error": "Se necesita un usuario (user) y contraseña (password)"}
+                    {"error": "Se necesita un usuario (user) o contraseña (password)"}
                 ),
                 400,
             )
@@ -154,7 +154,7 @@ def update_a_user():
                 400,
             )
 
-        if ("new_password" in data) and ("code" not in data):
+        if ("new_password" in data) and (("code" not in data)):
             return (
                 jsonify(
                     {
@@ -163,13 +163,50 @@ def update_a_user():
                 ),
                 400,
             )
-
+        
         updated = update_user(data)
 
         if "error" in updated:
             return jsonify(updated), 400
         else:
             return jsonify(updated), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
+
+
+@response_users_route.route("/api/response_users/recovery-code", methods=["PUT"])
+def get_a_recovery_code():
+    try:
+        data = request.get_json()
+
+        if "user" not in data:
+            return (
+                jsonify(
+                    {
+                        "error": "Se necesita un usuario (user) para recuperar su contraseña"
+                    }
+                ),
+                400,
+            )
+
+        if "email" not in data:
+            return (
+                jsonify(
+                    {
+                        "error": "Se necesita un correo electrónico (email) para enviar el código de recuperación"
+                    }
+                ),
+                400,
+            )
+
+        recover = recovery_password(data)
+
+        if "error" in recover:
+            return jsonify(recover), 400
+        else:
+            return jsonify(recover), 200
 
     except Exception as e:
         print(f"Error: {e}")
@@ -221,7 +258,9 @@ def delete_a_session():
                 )
         else:
             return (
-                jsonify({"error": "No se ha podido cerrar la sesión. No existe un token"}),
+                jsonify(
+                    {"error": "No se ha podido cerrar la sesión. No existe un token"}
+                ),
                 401,
             )
 
