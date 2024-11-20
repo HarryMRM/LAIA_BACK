@@ -5,6 +5,7 @@ from services.users_admin import (
     validate_user,
     update_user,
     delete_user,
+    request_user_code,
 )
 from services.token_admin import (
     get_access_token,
@@ -14,7 +15,6 @@ from services.token_admin import (
     remove_token,
 )
 from utils.authenticate import authenticate
-from services.recovery_password import recovery_password
 
 response_users_route = Blueprint("response_users", __name__)
 
@@ -144,7 +144,7 @@ def update_a_user():
                 400,
             )
 
-        if ("new_user" not in data) and ("new_password" not in data):
+        if ("newUser" not in data) and ("newPassword" not in data):
             return (
                 jsonify(
                     {
@@ -154,7 +154,7 @@ def update_a_user():
                 400,
             )
 
-        if ("new_password" in data) and (("code" not in data)):
+        if ("newPassword" in data) and (("code" not in data)):
             return (
                 jsonify(
                     {
@@ -163,7 +163,7 @@ def update_a_user():
                 ),
                 400,
             )
-        
+
         updated = update_user(data)
 
         if "error" in updated:
@@ -176,7 +176,7 @@ def update_a_user():
         return jsonify({"error": "Error interno del servidor"}), 500
 
 
-@response_users_route.route("/api/response_users/recovery-code", methods=["PUT"])
+@response_users_route.route("/api/response_users/recovery-code", methods=["POST"])
 def get_a_recovery_code():
     try:
         data = request.get_json()
@@ -201,7 +201,7 @@ def get_a_recovery_code():
                 400,
             )
 
-        recover = recovery_password(data)
+        recover = request_user_code(data)
 
         if "error" in recover:
             return jsonify(recover), 400

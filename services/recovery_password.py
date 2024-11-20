@@ -3,8 +3,6 @@ import pymongo
 import random
 from config import RESEND_API_KEY, MONGO_URI, MONGO_DATABASE_USR, MONGO_COLLECTION_PWD
 
-from services.users_admin import user_exists
-
 resend.api_key = RESEND_API_KEY
 
 CODE_LENGTH = 8
@@ -19,7 +17,7 @@ Se conecta con el cliente de la base de datos
 """
 try:
     cliente = pymongo.MongoClient(MONGO_URI, serverSelectionTimeoutMS=TIMEOUT)
-    print("Conexión con la base de datos de usuarios establecida!")
+    print("Conexión con la base de datos de recuperación establecida!")
 
 except pymongo.errors.ServerSelectionTimeoutError as timeError:
     print(f"Tiempo excedido: {timeError}")
@@ -101,18 +99,14 @@ Retorna un mensaje de éxito o error
 """
 
 
-def recovery_password(doc):
+def recovery_user_code(doc):
     try:
-        if user_exists(doc.get("user")):
-            code = generate_code()
-            send_code(doc.get("email"), doc.get("user"), code)
+        code = generate_code()
+        send_code(doc.get("email"), doc.get("user"), code)
 
-            data = {"user": doc.get("user"), "code": code}
-            save_recovery_password(data)
-            return {"message": "Código de recuperación enviado"}
-
-        else:
-            return {"error": "Usuario no encontrado"}
+        data = {"user": doc.get("user"), "code": code}
+        save_recovery_code(data)
+        return {"message": "Código de recuperación enviado"}
 
     except Exception as e:
         print(f"Error: {e}")
@@ -126,10 +120,9 @@ Retorna un mensaje de éxito o error
 """
 
 
-def save_recovery_password(doc):
+def save_recovery_code(doc):
     try:
         collection.insert_one(doc)
-
         return True
 
     except Exception as e:
@@ -144,9 +137,9 @@ Retorna un mensaje de éxito o error
 """
 
 
-def validate_recovery_password(code):
+def validate_recovery_code(user, code):
     try:
-        data = collection.find_one({"user": doc.get("user")})
+        data = collection.find_one({"user": user})
         data["_id"] = str(data.get("_id"))
 
         return code == data.get("code")
@@ -163,7 +156,7 @@ Retorna un mensaje de éxito o error
 """
 
 
-def delete_recovery_password(doc):
+def delete_recovery_code(doc):
     try:
         collection.delete_one({"user": doc.get("user")})
 

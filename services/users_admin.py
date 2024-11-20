@@ -3,7 +3,11 @@ Se importan MONGO_URI, MONGO_DATABASE_USR, y MONGO_COLLECTION_USR las cuales per
 
 import pymongo
 from config import MONGO_URI, MONGO_DATABASE_USR, MONGO_COLLECTION_USR
-from services.recovery_password import validate_recovery_password, delete_recovery_password
+from services.recovery_password import (
+    validate_recovery_code,
+    delete_recovery_code,
+    recovery_user_code,
+)
 
 # from utils.crypt_data import encrypt_data, decrypt_data, data_equals_encrypted
 
@@ -137,16 +141,19 @@ Retorna un diccionario con el usuario actualizado o un mensaje de error
 def update_user(doc):
     try:
         if user_exists(doc.get("user")):
-            if "new_password" in doc:
-                if True:  # Validar codigo de confirmación
-                    if not (doc.get("new_password") == doc.get("password")):
+            if "newPassword" in doc:
+                if validate_recovery_code(
+                    doc.get("user"), doc.get("code")
+                ):  # Validar codigo de confirmación
+                    if not (doc.get("newPassword") == doc.get("password")):
                         updated = collection.update_one(
                             filter={"user": doc.get("user")},
-                            update={"$set": {"password": doc.get("new_password")}},
+                            update={"$set": {"password": doc.get("newPassword")}},
                         )
                         updated = collection.find_one({"user": doc.get("user")})
                         updated["_id"] = str(updated.get("_id"))
                         updated["password"] = str(updated.get("password"))
+                        delete_recovery_code(doc)
                         return updated
 
                     else:
@@ -207,6 +214,26 @@ def delete_user(doc):
 
             else:  # If the password is not correct
                 return {"error": "Usuario y/o Contraseña incorrectos"}
+
+        else:  # If the user not exists
+            return {"error": "Usuario y/o Contraseña incorrectos"}
+
+    except pymongo.errors.ConnectionFailure as connectionError:
+        return {"error": f"Error al eliminar el usuario:\n{connectionError}"}
+
+
+"""
+Se define una función la cual se encarga de eliminar un usuario de la base de datos
+Recibe un diccionario con el usuario a eliminar
+Retorna un mensaje indicando éxito o error
+"""
+
+
+def request_user_code(doc):
+    try:
+        if user_exists(doc.get("user")):
+            recovery_user_code(doc)
+            return {"message": "Código de recuperación enviado"}
 
         else:  # If the user not exists
             return {"error": "Usuario y/o Contraseña incorrectos"}
